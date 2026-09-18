@@ -1,42 +1,38 @@
 /* ============================================================
- * LOAN DATA — this is the only file you need to edit.
+ * LOAN TERMS — the dashboard computes everything else itself.
  *
- * To record a payment:
- *   1. Open this file on GitHub and click the pencil (Edit) icon
- *   2. Add a line to the PAYMENTS list below, newest at the bottom:
- *        { date: "2026-10-15", amount: 500 },
- *      (date is YYYY-MM-DD; don't forget the comma at the end)
- *   3. Click "Commit changes". The dashboard updates itself.
+ * Payments are assumed to happen once a month, every month,
+ * starting with firstPaymentMonth, until the loan is paid off.
+ * The page counts how many months have elapsed each time it
+ * loads, so nothing here needs editing month to month.
  *
- * NOTE: the numbers below are SAMPLE DATA. Replace them with
- * the real loan terms and real payments.
+ * If a payment is ever skipped or an extra amount is paid,
+ * add it to "adjustments" (positive = extra paid, negative =
+ * a missed month), e.g.:
+ *   adjustments: [ { date: "2027-03-01", amount: -400, note: "skipped March" } ]
  * ============================================================ */
 
-const LOAN = {
-  lender: "Dad",
-  borrower: "Steve",
-  principal: 25000,        // amount originally lent, in dollars
-  annualRatePct: 5,        // yearly interest rate (0 for interest-free)
-  startDate: "2025-06-01", // day the money was handed over (YYYY-MM-DD)
-  scheduledPayment: 500,   // agreed monthly payment, in dollars
-  paymentDayOfMonth: 15,   // day of the month a payment is expected
-};
+const TRACKER = {
+  finalDueDate: "2044-09-30",   // remaining balances due in full on this date
 
-const PAYMENTS = [
-  // { date: "YYYY-MM-DD", amount: dollars, note: "optional" },
-  { date: "2025-06-15", amount: 500 },
-  { date: "2025-07-15", amount: 500 },
-  { date: "2025-08-15", amount: 500 },
-  { date: "2025-09-14", amount: 750, note: "extra from bonus" },
-  { date: "2025-10-15", amount: 500 },
-  { date: "2025-11-17", amount: 500 },
-  { date: "2025-12-15", amount: 500 },
-  { date: "2026-01-15", amount: 500 },
-  { date: "2026-02-16", amount: 500 },
-  { date: "2026-03-16", amount: 500 },
-  { date: "2026-04-15", amount: 1000, note: "tax refund" },
-  { date: "2026-05-15", amount: 500 },
-  { date: "2026-06-15", amount: 500 },
-  { date: "2026-07-15", amount: 500 },
-  { date: "2026-08-17", amount: 500 },
-];
+  loans: [
+    {
+      name: "Uncle Steve",
+      principal: 95000,          // amount borrowed
+      monthlyPayment: 400,
+      startMonth: "2024-10",     // loan initiated
+      firstPaymentMonth: "2024-12",
+      paymentDayOfMonth: 1,      // the month counts as paid on/after this day
+      adjustments: [],
+    },
+    {
+      name: "Mom & Dad",
+      principal: 70000,
+      monthlyPayment: 250,
+      startMonth: "2024-10",
+      firstPaymentMonth: "2024-12",
+      paymentDayOfMonth: 1,
+      adjustments: [],
+    },
+  ],
+};

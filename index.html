@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark">
-  <title>Loan Tracker</title>
-  <meta name="description" content="Dad &amp; Steve's loan dashboard — balance, payments, and history.">
+  <title>Family Loan Tracker</title>
+  <meta name="description" content="Live status of two family loans — paid, remaining, and percent complete.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231A1A1A'/%3E%3Cpath d='M8 20 L14 14 L18 17 L24 9' stroke='%2376B900' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,35 +22,35 @@
       </a>
       <div class="nav-links">
         <a href="#overview" class="nav-link">Overview</a>
-        <a href="#charts" class="nav-link">Charts</a>
-        <a href="#history" class="nav-link">History</a>
+        <a href="#loans" class="nav-link">Loans</a>
+        <a href="#timeline" class="nav-link">Timeline</a>
       </div>
     </div>
   </nav>
 
   <header class="hero container" id="top">
     <div class="hero-text reveal">
-      <p class="eyebrow" id="hero-eyebrow">Loan · Dad → Steve</p>
-      <h1>Where the loan<br>stands today</h1>
-      <p class="hero-sub">Live balance, every payment on record, and the road to paid-off. Updated whenever a payment is logged.</p>
+      <p class="eyebrow">Family loan dashboard</p>
+      <h1>Two loans,<br>one steady plan</h1>
+      <p class="hero-sub">One payment to each lender, every month, until both loans are cleared. This page recalculates the current status every time it loads.</p>
       <div class="hero-figure">
-        <span class="hero-label">Balance remaining</span>
-        <span class="hero-value" id="hero-balance">—</span>
+        <span class="hero-label">Total remaining</span>
+        <span class="hero-value" id="hero-remaining">—</span>
         <span class="hero-delta" id="hero-delta"></span>
       </div>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#history">
+        <a class="btn btn-primary" href="#loans">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
-          Payment history
+          Loan status
         </a>
-        <a class="btn btn-ghost" href="https://github.com/davidmichio/Dad-Steve-Loan-Tracker/edit/main/data.js">Record a payment</a>
+        <a class="btn btn-ghost" href="#timeline">Payoff timeline</a>
       </div>
     </div>
-    <div class="hero-visual reveal" aria-hidden="true">
-      <canvas id="net-canvas"></canvas>
+    <div class="hero-visual reveal">
+      <div class="building-wrap" aria-hidden="true" id="building-wrap"><!-- line drawing injected --></div>
       <div class="hero-visual-meter">
         <div class="meter-head">
-          <span>Paid off</span>
+          <span>Paid off overall</span>
           <span id="meter-pct">—</span>
         </div>
         <div class="meter-track"><div class="meter-fill" id="meter-fill"></div></div>
@@ -64,67 +64,23 @@
       <div class="kpi-row" id="kpi-row"><!-- stat tiles injected --></div>
     </section>
 
-    <section id="charts" class="section">
+    <section id="loans" class="section">
+      <div class="loan-grid" id="loan-grid"><!-- loan cards injected --></div>
+    </section>
+
+    <section id="timeline" class="section">
       <div class="card chart-card reveal">
         <div class="card-head">
           <div>
-            <h2>Balance over time</h2>
-            <p class="card-sub">Principal outstanding after each payment</p>
+            <h2>Payoff timeline</h2>
+            <p class="card-sub">Balance by month — solid is history, faded is the road ahead</p>
+          </div>
+          <div class="legend">
+            <span class="legend-item"><span class="swatch swatch-principal"></span>Uncle Steve</span>
+            <span class="legend-item"><span class="swatch swatch-interest"></span>Mom &amp; Dad</span>
           </div>
         </div>
-        <div class="chart-wrap" id="balance-chart"></div>
-      </div>
-
-      <div class="card chart-card reveal">
-        <div class="card-head">
-          <div>
-            <h2>Payments</h2>
-            <p class="card-sub">Each payment split into principal and interest</p>
-          </div>
-          <div class="legend" id="payments-legend">
-            <span class="legend-item"><span class="swatch swatch-principal"></span>Principal</span>
-            <span class="legend-item"><span class="swatch swatch-interest"></span>Interest</span>
-          </div>
-        </div>
-        <div class="chart-wrap" id="payments-chart"></div>
-      </div>
-    </section>
-
-    <section id="history" class="section">
-      <div class="card reveal">
-        <div class="card-head">
-          <div>
-            <h2>Payment history</h2>
-            <p class="card-sub" id="history-sub">Every payment on record</p>
-          </div>
-        </div>
-        <div class="table-scroll">
-          <table class="pay-table" id="pay-table">
-            <thead>
-              <tr><th>#</th><th>Date</th><th class="num">Amount</th><th class="num">Interest</th><th class="num">Principal</th><th class="num">Balance after</th><th>Note</th></tr>
-            </thead>
-            <tbody><!-- rows injected --></tbody>
-          </table>
-        </div>
-        <div class="empty-state" id="empty-state" hidden>
-          <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4" stroke-linecap="round"/></svg>
-          <p>No payments recorded yet.</p>
-          <a class="btn btn-primary" href="https://github.com/davidmichio/Dad-Steve-Loan-Tracker/edit/main/data.js">Record the first payment</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section how-to reveal">
-      <div class="how-grid">
-        <div>
-          <h2>How to log a payment</h2>
-          <p>The dashboard reads from one small file, <code>data.js</code>. Edit it on GitHub, commit, and this page rebuilds itself — nothing to install.</p>
-        </div>
-        <ol class="how-steps">
-          <li><span class="step-n">01</span>Open <code>data.js</code> on GitHub and click the pencil icon</li>
-          <li><span class="step-n">02</span>Add one line: <code>{ date: "2026-10-15", amount: 500 },</code></li>
-          <li><span class="step-n">03</span>Commit changes — done</li>
-        </ol>
+        <div class="chart-wrap" id="timeline-chart"></div>
       </div>
     </section>
 
