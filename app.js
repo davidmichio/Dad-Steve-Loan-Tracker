@@ -408,6 +408,18 @@
       document.getElementById("meter-fill").style.width = pct.toFixed(1) + "%";
     });
 
+    var ms = document.getElementById("milestones");
+    ms.innerHTML = "";
+    (TRACKER.milestones || []).forEach(function (m) {
+      var d = document.createElement("div");
+      d.className = "milestone" + (ymIdx(m.month) > NOW_IDX ? " future" : "");
+      d.innerHTML = '<span class="milestone-dot"></span>' +
+        '<span class="milestone-date">' + idxLabel(ymIdx(m.month)) + "</span>" +
+        "<h3>" + m.label + "</h3>" +
+        '<p>' + m.detail + "</p>";
+      ms.appendChild(d);
+    });
+
     var kpi = document.getElementById("kpi-row");
     kpi.innerHTML = "";
     kpi.appendChild(statTile("bank", "Total borrowed", fmtMoney(totPrincipal),

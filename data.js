@@ -15,6 +15,13 @@
 const TRACKER = {
   finalDueDate: "2044-09-30",   // remaining balances due in full on this date
 
+  // the story so far, shown as a timeline strip on the page
+  milestones: [
+    { month: "2014-03", label: "Purchased", detail: "$300,000 original price" },
+    { month: "2024-10", label: "Mortgage paid off", detail: "Two family loans begin" },
+    { month: "2044-09", label: "Final due date", detail: "Remaining balances due Sep 30" },
+  ],
+
   loans: [
     {
       name: "Uncle Steve",

@@ -217,6 +217,58 @@ h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
 }
 .card-sub { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem; }
 
+/* Milestone timeline strip */
+
+.milestones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+.milestones::before {
+  content: "";
+  position: absolute;
+  top: 5px; left: 4px; right: 15%;
+  height: 1px;
+  background: var(--border-strong);
+}
+.milestone { position: relative; padding-top: 1.5rem; }
+.milestone-dot {
+  position: absolute;
+  top: 0; left: 0;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green-glow);
+}
+.milestone.future .milestone-dot {
+  background: var(--bg);
+  border: 2px solid var(--border-strong);
+  box-shadow: none;
+}
+.milestone-date {
+  display: block;
+  color: var(--green);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.milestone.future .milestone-date { color: var(--text-muted); }
+.milestone h3 { font-size: 1.0625rem; font-weight: 700; margin-top: 0.25rem; }
+.milestone p { color: var(--text-muted); font-size: 0.875rem; margin-top: 0.25rem; }
+
+@media (max-width: 768px) {
+  .milestones { grid-template-columns: 1fr; gap: 1.5rem; }
+  .milestones::before {
+    top: 4px; bottom: 4px; left: 5px; right: auto;
+    width: 1px; height: auto;
+  }
+  .milestone { padding: 0 0 0 2rem; }
+  .milestone-dot { top: 2px; }
+}
+
 /* KPI row */
 
 .kpi-row {
