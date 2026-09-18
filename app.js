@@ -398,14 +398,17 @@
     });
     var pct = totPrincipal > 0 ? totPaid / totPrincipal * 100 : 0;
 
-    document.getElementById("hero-remaining").textContent = fmtMoney(totRemaining);
-    document.getElementById("hero-delta").innerHTML =
-      '<span class="up">' + fmtMoney(totPaid) + " paid</span> · " +
-      pct.toFixed(1) + "% of " + fmtMoney(totPrincipal);
-
+    // meters: family-loan progress, and progress against the original price
+    // (everything not owed to the family counts as paid off of the original)
+    var origPrice = TRACKER.originalPrice || totPrincipal;
+    var origPct = Math.min(100, (origPrice - totRemaining) / origPrice * 100);
     document.getElementById("meter-pct").textContent = pct.toFixed(1) + "%";
+    document.getElementById("meter-orig-label").textContent =
+      "Of original " + fmtMoney(origPrice);
+    document.getElementById("meter-pct-orig").textContent = origPct.toFixed(1) + "%";
     requestAnimationFrame(function () {
       document.getElementById("meter-fill").style.width = pct.toFixed(1) + "%";
+      document.getElementById("meter-fill-orig").style.width = origPct.toFixed(1) + "%";
     });
 
     var ms = document.getElementById("milestones");

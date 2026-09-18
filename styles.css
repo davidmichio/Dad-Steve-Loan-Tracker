@@ -179,6 +179,7 @@ h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
   border-radius: var(--radius);
   backdrop-filter: blur(4px);
 }
+.meter-block + .meter-block { margin-top: 1rem; }
 .meter-head {
   display: flex; justify-content: space-between;
   font-size: 0.875rem; font-weight: 500; color: var(--text-2);
@@ -208,8 +209,6 @@ h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
   padding: 1.5rem;
 }
-.card + .card { margin-top: 2rem; }
-
 .card-head {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: 1rem; flex-wrap: wrap;
@@ -330,10 +329,15 @@ h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
 
 .loan-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  align-items: stretch;
 }
-.loan-card { --accent: var(--green); --accent-chart: var(--green-chart); }
+.loan-card {
+  --accent: var(--green); --accent-chart: var(--green-chart);
+  display: flex; flex-direction: column;
+}
+.loan-card .loan-due { margin-top: auto; padding-top: 1rem; }
 .loan-head h2 { display: flex; align-items: center; gap: 0.6rem; }
 .loan-dot {
   width: 12px; height: 12px; border-radius: 3px;
@@ -355,7 +359,7 @@ h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
 .loan-track { background: color-mix(in srgb, var(--accent) 15%, transparent); }
 .loan-fill { background: var(--accent-chart); width: 0; }
 .loan-due {
-  margin-top: 1rem; padding-top: 1rem;
+  margin-top: 1.5rem; padding-top: 1rem;
   border-top: 1px solid var(--border);
   font-size: 0.875rem; color: var(--text-2);
 }
@@ -413,6 +417,7 @@ h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
 
 @media (max-width: 768px) {
   .hero { grid-template-columns: 1fr; gap: 2rem; }
+  .loan-grid { grid-template-columns: 1fr; }
   .hero-visual { min-height: 260px; }
   .how-grid { grid-template-columns: 1fr; gap: 1.5rem; }
   .nav-links { gap: 1rem; }

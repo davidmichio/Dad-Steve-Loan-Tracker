@@ -14,6 +14,7 @@
 
 const TRACKER = {
   finalDueDate: "2044-09-30",   // remaining balances due in full on this date
+  originalPrice: 300000,        // original purchase price (March 2014)
 
   // the story so far, shown as a timeline strip on the page
   milestones: [
