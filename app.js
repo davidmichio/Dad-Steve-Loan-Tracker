@@ -477,7 +477,10 @@
     els.forEach(function (e) { io.observe(e); });
   }
 
-  render();
-  buildBuilding();
-  startReveals();
+  // keep the page visible even if one piece fails (e.g. stale cached data.js)
+  try { render(); } catch (e) { console.error("render failed:", e); }
+  try { buildBuilding(); } catch (e) { console.error("drawing failed:", e); }
+  try { startReveals(); } catch (e) {
+    document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
+  }
 })();
