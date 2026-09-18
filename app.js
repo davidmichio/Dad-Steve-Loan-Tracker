@@ -302,52 +302,88 @@
       if (dim) p.setAttribute("opacity", 0.55);
       return p;
     }
-
-    // ground
-    P("M16 352 H424");
-    // facade outline
-    P("M96 352 V78 H344 V352");
-    // cornice + parapet
-    P("M88 78 H352 M92 66 H348 M92 66 V78 M348 66 V78");
-    P("M104 56 H336 M104 56 V66 M336 56 V66");
-    // dentil band under the cornice
-    var dent = "";
-    for (var x = 104; x <= 336; x += 16) dent += "M" + x + " 68 V76 ";
-    P(dent, true);
-    // belt courses between floors
-    P("M96 148 H344", true);
-    P("M96 218 H344", true);
-    P("M96 288 H344", true);
-
-    // windows: three upper floors, four windows each
-    var cols = [112, 172, 236, 296];
-    [92, 162, 232].forEach(function (fy) {
-      cols.forEach(function (wx) {
-        P("M" + wx + " " + fy + " h32 v44 h-32 Z");
-        P("M" + wx + " " + (fy + 22) + " h32 M" + (wx + 16) + " " + fy + " v22", true);
+    function railing(x0, x1, top, slab) { // balcony: rails + balusters + deck slab
+      P("M" + x0 + " " + top + " H" + x1 +
+        " M" + x0 + " " + top + " V" + slab + " M" + x1 + " " + top + " V" + slab);
+      var bal = "";
+      for (var x = x0 + 7; x < x1 - 3; x += 8) bal += "M" + x + " " + (top + 4) + " V" + slab + " ";
+      P(bal, true);
+      P("M" + (x0 - 6) + " " + slab + " H" + (x1 + 6) +
+        " M" + (x0 - 6) + " " + (slab + 6) + " H" + (x1 + 6));
+    }
+    function conifer(cx, top, bot, hw) { // pine as three overlapping triangles
+      var span = bot - top;
+      var tiers = [
+        [0, 0.42, 0.58],
+        [0.24, 0.72, 0.8],
+        [0.5, 1.0, 1.0]
+      ];
+      tiers.forEach(function (t) {
+        var yT = top + span * t[0], yB = top + span * t[1], w = hw * t[2];
+        P("M" + cx + " " + yT.toFixed(0) +
+          " L" + (cx - w).toFixed(0) + " " + yB.toFixed(0) +
+          " H" + (cx + w).toFixed(0) + " Z");
       });
-      // sills
-      P(cols.map(function (wx) { return "M" + (wx - 4) + " " + (fy + 46) + " h40"; }).join(" "), true);
-    });
+      P("M" + cx + " " + bot + " V352", true); // trunk to ground
+    }
 
-    // ground floor: two outer windows + arched entry
-    [112, 296].forEach(function (wx) {
-      P("M" + wx + " 302 h32 v40 h-32 Z");
-      P("M" + wx + " 322 h32 M" + (wx + 16) + " 302 v20", true);
-    });
-    // entry: canopy, arch, double door, steps
-    P("M182 294 H258 M188 294 V302 M252 294 V302", true);
-    P("M186 352 V310 Q220 288 254 310 V352");
-    P("M196 352 V316 H244 V352 M220 316 V352");
-    P("M204 324 h10 M226 324 h10", true);
-    P("M178 352 H262 M184 358 H256 M16 358 h0", true);
+    // sidewalk
+    P("M16 352 H424");
 
-    // trees & shrubs
-    P("M56 352 V320 M56 320 Q40 316 42 300 Q44 284 60 286 Q76 284 74 302 Q76 318 56 320");
-    P("M392 352 V330 M392 330 Q380 328 382 316 Q384 306 394 308 Q404 306 402 318 Q404 328 392 330", true);
-    // birds + moon
-    P("M356 96 q6 -6 12 0 M372 86 q5 -5 10 0", true);
-    P("M398 44 a13 13 0 1 0 0.1 0", true);
+    // gable roof with overhang + inner fascia line
+    P("M140 92 L216 38 L292 92");
+    P("M150 88 L216 46 L282 88", true);
+    // building body
+    P("M152 92 V308 M280 92 V308 M152 308 H280");
+    // attic vent in the gable
+    P("M204 62 h24 v14 h-24 Z M216 62 v14", true);
+
+    // top balcony under the gable
+    railing(158, 274, 104, 146);
+    P("M196 98 h40 v40 M216 98 v40", true); // slider door behind
+    // wall band + siding hints
+    P("M152 162 H280 M152 172 H280", true);
+    // middle balcony
+    railing(158, 274, 188, 230);
+    P("M196 182 h40 v40 M216 182 v40", true);
+    // lower wall siding
+    P("M152 246 H280 M152 256 H280", true);
+
+    // ground floor: window + entry door
+    P("M162 262 h30 v34 h-30 Z M177 262 v34", true);
+    P("M232 308 V260 h36 v48 M250 284 h6", true);
+    P("M228 254 h44", true); // door header trim
+
+    // hillside under the building, held by concrete retaining walls
+    P("M152 308 V330 M280 308 V334", true);
+    P("M120 330 H176 M116 330 V352 M180 330 V336");
+    P("M248 334 H316 M244 334 V352 M320 334 V344", true);
+    P("M96 344 H120 M96 344 V352", true);
+
+    // staircase up the hill + handrail
+    P("M180 352 h12 v-8 h12 v-8 h12 v-8 h12 v-8 h12 v-8 v-4");
+    P("M186 344 L244 308", true);
+
+    // wooden fence, left
+    (function () {
+      var f = "M20 302 H88 M20 326 H88 ";
+      for (var x = 24; x <= 86; x += 9) f += "M" + x + " 298 V352 ";
+      P(f, true);
+    })();
+    // bare deciduous tree behind the fence
+    P("M112 352 V286 M112 302 L96 274 M112 294 L128 268 M104 316 L90 300 M120 312 L134 296", true);
+
+    // evergreens, right — the big pair
+    conifer(342, 70, 330, 42);
+    conifer(398, 150, 336, 30);
+
+    // shrubs on the planters + rocks
+    P("M126 330 Q134 318 142 330 Q150 320 158 330 Q166 322 172 330", true);
+    P("M256 334 Q266 322 276 334 Q286 324 296 334", true);
+    P("M140 352 l6 -10 10 0 6 10 Z", true);
+
+    // birds
+    P("M330 46 q6 -6 12 0 M348 36 q5 -5 10 0", true);
 
     wrap.appendChild(svg);
   }
